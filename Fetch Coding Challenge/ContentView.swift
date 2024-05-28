@@ -8,14 +8,30 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject private var viewModel = MealListViewModel()
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationView {
+            List(viewModel.meals) { meal in
+                NavigationLink(destination: MealDetailView(mealID: meal.id)) {
+                    HStack {
+                        AsyncImage(url: URL(string: meal.thumbnail)) { image in
+                            image.resizable()
+                        } placeholder: {
+                            ProgressView()
+                        }
+                        .frame(width: 50, height: 50)
+                        .clipShape(Circle())
+                        
+                        Text(meal.name)
+                    }
+                }
+            }
+            .navigationTitle("Desserts")
         }
-        .padding()
+        .task {
+            await viewModel.fetchMeals()
+        }
     }
 }
 
