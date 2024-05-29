@@ -28,6 +28,9 @@ struct ContentView: View {
                 }
             }
             .navigationTitle("Desserts")
+            .refreshable {
+                await viewModel.fetchMeals()
+            }
         }
         .task {
             await viewModel.fetchMeals()
