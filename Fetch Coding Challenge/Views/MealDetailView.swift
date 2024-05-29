@@ -15,33 +15,51 @@ struct MealDetailView: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading) {
-            if let meal = viewModel.meal {
-                Text(meal.name)
-                    .font(.largeTitle)
-                    .padding(.bottom)
-                
-                Text("Ingredients")
-                    .font(.headline)
-                
-                VStack{
-                    ForEach(meal.ingredients, id:\.self) { item in
-                        HStack {
-                            Text(item.ingredient)
-                            Text(item.measurement)
+            ScrollView {
+                VStack {
+                    if let meal = viewModel.meal {
+                        AsyncImage(url: URL(string: meal.thumbnail)) { image in
+                            image.resizable()
+                                .clipped()
+                        } placeholder: {
+                            ProgressView()
                         }
+                        .frame(height: 300)
+                        .clipped()
                         
+                        VStack(alignment: .leading) {
+                            Text(meal.name)
+                                .font(.largeTitle)
+                                .padding(.bottom)
+                            
+                            Text("Ingredients")
+                                .font(.headline)
+                                .padding(.bottom)
+                            
+                            VStack(alignment: .leading) {
+                                ForEach(meal.ingredients, id: \.self) { item in
+                                    HStack {
+                                        Text(item.ingredient)
+                                        Spacer()
+                                        Text(item.measurement)
+                                    }
+                                }
+                            }
+                            .padding(.horizontal)
+                            
+                            Text("Instructions")
+                                .font(.headline)
+                                .padding(.vertical)
+                            
+                            Text(meal.instructions)
+                        }
+                        .padding(.all)
+                    } else {
+                        ProgressView()
                     }
                 }
-                Text("Instructions")
-                    .font(.headline)
-                    .padding(.top)
-                Text(meal.instructions)
-            } else {
-                ProgressView()
             }
-        }
-        .padding()
+            .navigationBarTitleDisplayMode(.inline)
         .task {
             await viewModel.fetchMealDetail()
         }

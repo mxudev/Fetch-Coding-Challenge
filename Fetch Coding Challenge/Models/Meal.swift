@@ -58,8 +58,8 @@ struct MealDetail: Codable {
             let ingredientKey = "strIngredient\(index)"
             let measureKey = "strMeasure\(index)"
             
-            let ingredient = try additionalContainer.decode(String.self, forKey: AdditionalKeys(stringValue: ingredientKey)!)
-            let measurement = try additionalContainer.decode(String.self, forKey: AdditionalKeys(stringValue: measureKey)!)
+            let ingredient = try additionalContainer.decodeIfPresent(String.self, forKey: AdditionalKeys(stringValue: ingredientKey)!) ?? ""
+            let measurement = try additionalContainer.decodeIfPresent(String.self, forKey: AdditionalKeys(stringValue: measureKey)!) ?? ""
             
             if !ingredient.isEmpty && !measurement.isEmpty {
                 let newIngredient = Ingredient(ingredient: ingredient, measurement: measurement)

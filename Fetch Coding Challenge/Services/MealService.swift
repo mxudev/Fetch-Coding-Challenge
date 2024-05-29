@@ -23,6 +23,7 @@ class MealService {
         let (data, _) = try await URLSession.shared.data(from: url)
         let response = try JSONDecoder().decode(MealDetailResponse.self, from: data)
         guard let mealDetail = response.meals.first else {
+            print("NOOOOO")
             throw URLError(.badServerResponse)
         }
         return mealDetail
