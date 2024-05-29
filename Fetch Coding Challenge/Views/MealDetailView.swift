@@ -20,6 +20,7 @@ struct MealDetailView: View {
                     if let meal = viewModel.meal {
                         AsyncImage(url: URL(string: meal.thumbnail)) { image in
                             image.resizable()
+                                .scaledToFill()
                                 .clipped()
                         } placeholder: {
                             ProgressView()
